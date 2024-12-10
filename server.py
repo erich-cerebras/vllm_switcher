@@ -46,10 +46,10 @@ async def reset():
 
     # now get the JSON input of the user's name so that we can find their name
     data = request.get_json()
-    if not data or "username" not in data or "vllm_download_dir" not in data or "log_file" not in data:
+    if not data or "username" not in data or "vllm_download_dir" not in data or "log_file" not in data or "model" not in data:
         return "Error, invalid input", 400
 
-    print(data["username"], data["vllm_download_dir"], data["log_file"])
+    print(data["username"], data["vllm_download_dir"], data["log_file"], data["model"])
 
     async with lock:
         # find all processes that have vllm serve in it, and with the specific username but not the grep processes we just created
@@ -57,7 +57,7 @@ async def reset():
             return "vLLM server is already running!"
 
         # respawn it if we aren't running, and keep it
-        cmd = f'vllm serve meta-llama/Llama-3.3-70B-Instruct --tensor-parallel-size 4 --max-model-len 16384 --api-key serving-on-vllm --download_dir {data["vllm_download_dir"]} --port 8000'.split(" ")
+        cmd = f'vllm serve {data["model"]} --tensor-parallel-size 4 --max-model-len 16384 --api-key serving-on-vllm --download_dir {data["vllm_download_dir"]} --port 8000'.split(" ")
         vllm_pid = run_subprocess(cmd, data["vllm_download_dir"], data["log_file"])
         return f"PID: {vllm_pid}\n"
 
