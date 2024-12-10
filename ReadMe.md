@@ -14,3 +14,6 @@ Currently it's only set towards running Llama 3.3, but this repository can easil
 1. Making the string os safe since we'll be running user input if we allow switching between any huggingface model. Maybe consider only allowing users to choose between some chosen set of models
 2. The storage of the models themselves will depend on where they're stored and might be space constrained. Consider deleting other huggingface models if you need to download a new one.
 
+## Setup
+Install the `requirements.txt` using `pip`. If any issues arise from async, try running `pip install flask[async]`.
+
